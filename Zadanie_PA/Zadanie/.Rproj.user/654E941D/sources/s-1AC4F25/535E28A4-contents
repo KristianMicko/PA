@@ -1,0 +1,62 @@
+#
+# This is the user-interface definition of a Shiny web application. You can
+# run the application by clicking 'Run App' above.
+#
+# Find out more about building applications with Shiny here:
+# 
+#    http://shiny.rstudio.com/
+#
+
+library(shiny)
+
+# Define UI for application that draws a histogram
+shinyUI(fluidPage(
+  
+  # Application title
+  
+  tabsetPanel(
+    tabPanel("Data Iris",
+             verticalLayout(h1("Description"),
+      p("This famous (Fisher's or Anderson's) iris data set gives the measurements in centimeters of
+the variables sepal length and width and petal length and width, respectively, for 50 flowers
+from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica."))
+    ),
+    tabPanel("Tabulka",
+             sidebarLayout(
+                          sidebarPanel(
+                            h1("Popis dat"),
+                            p("Dáta sa skladajú zo 150 riadkov, 5 stĺpcov a sú voľne dostupné v programe RStudio")
+                            
+                            ),
+                          mainPanel(
+                            dataTableOutput("tablicka")
+                            
+                            )
+                          )
+             
+             ),
+     tabPanel("Grafy",
+              sidebarLayout(
+                            sidebarPanel(
+                                        selectInput("vyber1","Vyber atribut", choices = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species")),
+                                        selectInput("vyber2","Vyber druhy atribut", choices = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species")),
+                                        radioButtons("Vyber3","Vyberte farbu", choices = c("red","blue")),
+                                        textInput("vyber4","Pridajte popis pre x-ovu os"),
+                                        textInput("vyber5","Pridajte popis pre y-ovu os"),
+                                        textInput("vyber6","Pridajte nadpis")
+                                        ),
+                            
+                            mainPanel(
+                                        plotOutput("graficka")
+                                      )
+                            )
+              
+              
+              )  
+  )
+  
+  # Sidebar with a slider input for number of bins 
+  
+))
+
+

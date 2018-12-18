@@ -1,0 +1,67 @@
+#
+# This is the server logic of a Shiny web application. You can run the 
+# application by clicking 'Run App' above.
+#
+# Find out more about building applications with Shiny here:
+# 
+#    http://shiny.rstudio.com/
+#
+
+library(shiny)
+
+# Define server logic required to draw a histogram
+shinyServer(function(input, output) {
+   
+ 
+  output$tablicka = renderDataTable({
+    print.data.frame(iris)
+    
+  })
+  
+  output$graficka = renderPlot({
+    if(input$vyber2 == "Sepal.Length"){
+      y=iris[,1]
+    }
+    
+    if(input$vyber2 == "Sepal.Width"){
+      y=iris[,2]
+    }  
+      
+    if(input$vyber2 == "Petal.Length"){
+      y=iris[,3]
+    }
+      
+    if(input$vyber2 == "Petal.Width"){
+      y=iris[,4]
+    }
+    
+    if(input$vyber2 == "Species"){
+      y=iris[,5]
+    }
+    
+    if(input$vyber1 == "Sepal.Length"){
+      x=iris[,1]
+    }
+    
+    if(input$vyber1 == "Sepal.Width"){
+      x=iris[,2]
+    }  
+    
+    if(input$vyber1 == "Petal.Length"){
+      x=iris[,3]
+    }
+    
+    if(input$vyber1 == "Petal.Width"){
+      x=iris[,4]
+    }
+    
+    if(input$vyber1 == "Species"){
+      x=iris[,5]
+    }
+      
+    plot(y~x,col=input$Vyber3, main=input$vyber6, xlab=input$vyber4, ylab = input$vyber5)
+  })
+  
+  
+    
+})

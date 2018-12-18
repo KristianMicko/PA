@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1544865775605.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D2648706",
+    "lastKnownWriteTime" : 3419473789575321445,
+    "last_content_update" : 1544865775605,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "FD47EBB3",
+        "caption" : "Napilon_2",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=Napilon_2&cache_key=FD47EBB3",
+        "displayedObservations" : "3569",
+        "environment" : "",
+        "object" : "Napilon_2",
+        "preview" : "0",
+        "totalObservations" : "3569",
+        "variables" : "3"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

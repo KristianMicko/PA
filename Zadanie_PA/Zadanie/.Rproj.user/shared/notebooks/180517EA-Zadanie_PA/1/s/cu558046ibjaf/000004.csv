@@ -1,0 +1,1 @@
+"0","Napilon_2 = data.frame(Alpha = Alpha_pred,Beta_pred=spojeneTabulky_1[which(spojeneTabulky_1$Mesiace == 12),""Transaction""],predpoved)"

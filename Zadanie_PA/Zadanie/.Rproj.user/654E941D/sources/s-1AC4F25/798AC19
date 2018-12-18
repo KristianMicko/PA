@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1545127996921.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3142057131",
+    "id" : "798AC19",
+    "lastKnownWriteTime" : 1538751260,
+    "last_content_update" : 1538751260,
+    "path" : "H:/PA/Cvicenie_2/server.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 11,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
