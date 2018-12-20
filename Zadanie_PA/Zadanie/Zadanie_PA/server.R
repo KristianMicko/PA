@@ -96,7 +96,8 @@ shinyServer(function(input, output) {
   })
   
   output$Tabulka = renderDataTable({
-    spojeneTabulky_1 = readRDS("Data_3.rda")
+    #spojeneTabulky_1 = readRDS("Data_3.rda")
+    spojeneTabulky_1 = readRDS("final_1.rda")
     print.data.frame(spojeneTabulky_1)
     })
   
