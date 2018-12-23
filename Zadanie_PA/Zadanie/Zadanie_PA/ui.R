@@ -44,17 +44,10 @@ shinyUI(fluidPage(
              ),
     
     tabPanel("Modelovanie", verticalLayout(
-          h1("Modelovanie"),
-          p("Predikovany graf"),
-          plotOutput("Model"),
-          selectInput("Mesiace","Zvol vstupny mesiac na predikciu", c("Oktober 2016", "November 2016", "December 2016",
-                                                               "Januar 2017", "Februar 2017", "Marec 2017", "April 2017")),
-          selectInput("Mesiace1","Zvol predikovany mesiac", c("Oktober 2016", "November 2016", "December 2016",
-                                                               "Januar 2017", "Februar 2017", "Marec 2017", "April 2017")),
-          p("Skutocne namerane hodnoty"),
-          plotOutput("Skutocny"),
-          p("Priemerna chyba"),
-          textOutput("VystupChyby")
+                            selectInput("VyberGrafu2","Vyber", c("Basic","two-key plot","graph","grouped","paracoord")),
+                            plotOutput("Graf_3"),
+                            selectInput("VyberHodnoty_1","Zadaja hodnotu confidence",c(.5,.6,.7))
+                            
         )
     
     )

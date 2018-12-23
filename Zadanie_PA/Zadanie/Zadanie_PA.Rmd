@@ -144,7 +144,7 @@ urcite vysledky.
 ###Naivny Bayes
 
 
-```{r}
+```{r echo=FALSE}
 sladkosti = c("Victorian Sponge","Vegan mincepie","Valentine's card","Tiffin","Truffles","The BART","Spread","Siblings"
              ,"Scone","Raw bars","Raspberry shortbread sandwich","Pick and Mix Bowls","My-5 Fruit Shoot","Muffin","Muesli"
              ,"Medialuna","Kids biscuit","Chocolates","Honey","Cherry me Dried fruit","Dulce de Leche","Bread Pudding"
@@ -291,13 +291,15 @@ vyhodnotenie a z tohto data.frame-u som vypocital celkovu uspesnost za trenovaci
 Co sa tyka testovacej mnoziny tak som do funkcie predict za argument newdata pridal testovaciu cast 
 a ostatny postup bol obdobny.
 
+![Ukazka kodu](zdrojKod.bmp)
+
 ```{r}
 set.seed(200)
 Vzorka = sample(2,nrow(spojeneTabulky_1_1),replace = TRUE, prob = c(0.7,0.3))
 
-spojeneTabulky_1_1.tren = spojeneTabulky_1_1[Vzorka==1,-12]
+spojeneTabulky_1_1.tren = spojeneTabulky_1_1[Vzorka==1,c(-4,-12)]
 spojeneTabulky_1_1.tren_spoj = spojeneTabulky_1_1[Vzorka==1,12]
-spojeneTabulky_1_1.test = spojeneTabulky_1_1[Vzorka==2,-12]
+spojeneTabulky_1_1.test = spojeneTabulky_1_1[Vzorka==2,c(-4,-12)]
 spojeneTabulky_1_1.test_spoj = spojeneTabulky_1_1[Vzorka==2,12]
 
 library(e1071)
@@ -323,7 +325,7 @@ spojeneTabulky_1_1.tren_1 = spojeneTabulky_1_1[Vzorka==1,]
 spojeneTabulky_1_1.test_1 = spojeneTabulky_1_1[Vzorka==2,]
 
 
-myFormula = Polozky ~ Item + Dni + hms.Minuty..minutes + hms.Hodiny..hour
+myFormula = Polozky ~  Dni + hms.Minuty..minutes + hms.Hodiny..hour
 spojeneTabulky_1_1.ctree = ctree(myFormula, data = spojeneTabulky_1_1.tren_1)
 plot(spojeneTabulky_1_1.ctree, type="simple")
 plot(spojeneTabulky_1_1.ctree)
@@ -331,4 +333,56 @@ table(predict(spojeneTabulky_1_1.ctree),spojeneTabulky_1_1.tren_1$Polozky)
 
 table(predict(spojeneTabulky_1_1.ctree, newdata=spojeneTabulky_1_1.test_1), spojeneTabulky_1_1.test_1$Polozky)
 ```
+
+Podla modelovania Naivneho Bayesa a rozhodovacieho stromu sa podarilo dosiahnut max do 30 uspesnosti. 
+Svedci to o tom, ze pouzite tieto dva metoda maju slabu podporu, pre tento typ ulohy
+data mining-u.
+
+###Asociacne pravidla
+
+najprv si este raz nacitame data zo suboru ale s podporou funkcie
+specialne urcenej na tento typ prikladu z baliku arules a arulesViz
+
+```{r}
+library(arules)
+library(arulesViz)
+
+selektovaneTransakcie = read.transactions("BreadBasket_DMS.csv",format="single",cols=c(3,4),sep=",")
+summary(itemFrequency(selektovaneTransakcie))
+```
+
+Podla sumarizacnej tabulky vidime, ze maximalnu frekvenciu poloziek 
+dosahujeme pri bode 0,4820079.
+Teraz vypocitame minimalnu podporu(support) tak,
+ze podelime 30 (lebo vsetkych poloziek je cez 90, tak aspon jednu tretinu uspesne prehladali)
+s dlzkou celkoveho obsahu premennej selektovaneTransakcie
+
+```{r}
+30/length(selektovaneTransakcie)
+```
+
+
+Pomocou algoritmu apriori zanalizujeme 
+transakcie
+ako vstupne parametre urcime
+podpora = 0,0045 a spolahlivost = 50% = 0,5
+
+```{r}
+pravidla <- apriori(selektovaneTransakcie,parameter=list(support=0.0045,confidence=.5))
+inspect(pravidla)
+
+```
+
+Grafy
+
+```{r}
+plot(pravidla, measure=c("support","lift"), shading="confidence")
+plot(pravidla, method = "two-key plot")
+plot(pravidla, method="graph")
+plot(pravidla, method="grouped")
+plot(pravidla, method="paracoord", control=list(reorder=TRUE))
+
+```
+
+
 

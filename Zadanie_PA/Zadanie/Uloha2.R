@@ -165,9 +165,9 @@ spojeneTabulky_1_1$Polozky = as.factor(spojeneTabulky_1_1$Polozky)
 set.seed(200)
 Vzorka = sample(2,nrow(spojeneTabulky_1_1),replace = TRUE, prob = c(0.7,0.3))
 
-spojeneTabulky_1_1.tren = spojeneTabulky_1_1[Vzorka==1,-12]
+spojeneTabulky_1_1.tren = spojeneTabulky_1_1[Vzorka==1,c(-4,-12)]
 spojeneTabulky_1_1.tren_spoj = spojeneTabulky_1_1[Vzorka==1,12]
-spojeneTabulky_1_1.test = spojeneTabulky_1_1[Vzorka==2,-12]
+spojeneTabulky_1_1.test = spojeneTabulky_1_1[Vzorka==2,c(-4,-12)]
 spojeneTabulky_1_1.test_spoj = spojeneTabulky_1_1[Vzorka==2,12]
 
 library(e1071)
@@ -188,14 +188,56 @@ spojeneTabulky_1_1.tren_1 = spojeneTabulky_1_1[Vzorka==1,]
 spojeneTabulky_1_1.test_1 = spojeneTabulky_1_1[Vzorka==2,]
 
 
-myFormula = Polozky ~ Item + Dni + hms.Minuty..minutes + hms.Hodiny..hour + Mesiace + Roky
+myFormula = Polozky ~ Dni + hms.Minuty..minutes + hms.Hodiny..hour + Mesiace + Roky
 spojeneTabulky_1_1.ctree = ctree(myFormula, data = spojeneTabulky_1_1.tren_1)
 plot(spojeneTabulky_1_1.ctree, type="simple")
 plot(spojeneTabulky_1_1.ctree)
 table(predict(spojeneTabulky_1_1.ctree),spojeneTabulky_1_1.tren_1$Polozky)
 
 table(predict(spojeneTabulky_1_1.ctree, newdata=spojeneTabulky_1_1.test_1), spojeneTabulky_1_1.test_1$Polozky)
+
+
+
+
 saveRDS(spojeneTabulky_1, "final.rda")
 saveRDS(spojeneTabulky_1_1, "final_1.rda")
-
+spojeneTabulky_1 = readRDS("final.rda")
+spojeneTabulky_1_1 =readRDS("final_1.rda")
 pie(sledovane_1$B, labels = j, col = rainbow(length(sledovane_1$B)), main = "Graf s rozdelenim predanych poloziek za sledovane obdobie")
+
+
+download.file("http://web.tuke.sk/fei-cit/butka/res/titanic.csv", destfile = "titanic.csv")
+titanic = read.csv("titanic.csv", header = TRUE, sep = ",")
+library(jsonlite)
+
+titanic = fromJSON("titanic.json") 
+#install.packages("arulesViz")
+library(arules)
+
+rules <- apriori(titanic, control = list(verbose=F), 
+                 parameter = list(minlen=2, supp=0.005, conf=0.8),     
+                 appearance = list(rhs=c("Survived=No","Survived=Yes"), default="lhs"))
+rules.sorted <- sort(rules, by="lift") 
+inspect(rules.sorted)
+library(arulesViz)
+plot(rules)
+
+
+
+
+
+
+inspect(head(pravidla, by="support", n=10))
+selektovaneTransakcie <- read.transactions("BreadBasket_DMS.csv",format="single",cols=c(3,4),sep=",")
+summary(itemFrequency(selektovaneTransakcie))
+30/length(selektovaneTransakcie)
+
+
+pravidla <- apriori(selektovaneTransakcie,parameter=list(support=0.0045,confidence=.5))
+inspect(pravidla)
+inspect(head(pravidla,by="confidence"))
+plot(pravidla, measure=c("support","lift"), shading="confidence")
+plot(pravidla, method = "two-key plot")
+plot(pravidla, method="graph")
+plot(pravidla, method="grouped")
+plot(pravidla, method="paracoord", control=list(reorder=TRUE))
